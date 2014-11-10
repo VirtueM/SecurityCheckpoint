@@ -1,0 +1,117 @@
+//Water Park Exhibit - November 9, 2014
+// Security Checkpoint
+//By Monica Virtue
+
+// Run this program only in the Java mode inside the IDE,
+// not on Processing.js (web mode)!!
+
+import processing.video.*;
+Capture cam;
+
+int s,c,a,d,r,h;
+
+// Learning Processing
+// Daniel Shiffman
+// http://www.learningprocessing.com
+// Example 17-3: Scrolling headlines 
+
+// An array of news headlines
+String[] headlines = {
+  "CODE ORANGE: Subject flagged as high risk security threat.",
+  "Subject has passed threshold for preventative arrest under Bill C-44.",
+  "RCMP database updated. CSIS database updated. FBI database updated. CIA database updated.",
+};
+
+PFont f; // Global font variable
+float x; // Horizontal location of headline
+int index = 0;
+
+boolean on;
+boolean n = false;
+int blinkSpeed = 30;
+
+void setup() {
+  size(1280, 720);
+  cam = new Capture(this, 1280, 720, 30);
+  cam.start();
+  f = createFont("OCR A std",50,true);
+  
+  s = 0;
+  c = 0;
+  a = 0;
+  d = 0;
+  r = 0;
+  h = 0;
+  
+// Initialize headline offscreen to the right
+  x = width;
+
+}
+
+void draw() {
+  if(cam.available()) {
+    cam.read();
+  }
+  image(cam, 0, 0);
+  
+  if (frameCount % blinkSpeed == 0) { on = !on; }
+  if (on)
+    
+switch (key) { 
+    case 's': 
+    case 'S':
+      textFont(f,50); 
+      textAlign(CENTER);
+      fill(0,255,0);
+      text("BIOMETRIC SCAN UNDERWAY", width/2, height/2); 
+      break;
+    case 'c': 
+    case 'C':
+      textFont(f,70);
+      textAlign(CENTER);
+      fill(0,255,0); 
+      text("SUBJECT CLEAR", width/2, height/2); 
+      break;
+    case 'a':
+    case 'A':
+      textFont(f,90); 
+      textAlign(CENTER);
+      fill(0,255,0);
+      text("SECURITY ALERT", width/2, height/2);  
+      break; 
+    case 'd':
+    case 'D':
+      textFont(f,70);  
+      textAlign(CENTER);
+      fill(0,255,0);
+      text("DATABASE MATCH", width/2, height/2);  
+      break;
+    default:
+    case 'r':
+    case 'R':
+      break; 
+    case 'h':
+    case 'H': 
+            
+  // Display headline at x location
+  textFont(f,40);
+  textAlign (LEFT);
+  fill(0,255,0);
+  
+  // A specific String from the array is displayed according to the value of the "index" variable.
+  text(headlines[index],x,600); 
+  
+  // Decrement x
+  x = x - 5;
+  
+  // If x is less than the negative width, 
+  // then it is off the screen
+  // textWidth() is used to calculate the width of the current String.
+  float w = textWidth(headlines[index]); 
+  if (x < -w) {
+    x = width;
+  // index is incremented when the current String has left the screen in order to display a new String.
+    index = (index + 1) % headlines.length; 
+   break;}
+  }
+}
